@@ -67,6 +67,7 @@ export default function OrderPage() {
   const [sleeve, setSleeve] = useState<SleeveType>('short');
   const [quantity, setQuantity] = useState(1);
   const [sizeGroup, setSizeGroup] = useState<'adult' | 'child'>('adult');
+  const [showSizeGuide, setShowSizeGuide] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -671,23 +672,54 @@ export default function OrderPage() {
               {/* Size */}
               <div>
                 <div className="mb-3 flex items-center justify-between">
-                  <Label>
-                    Talla <span className="text-red-500">*</span>
-                  </Label>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      toggleSizeGroup(sizeGroup === 'adult' ? 'child' : 'adult')
-                    }
-                    className={cn(
-                      'rounded-lg border-2 px-3 py-1.5 text-xs font-semibold transition-all',
-                      sizeGroup === 'child'
-                        ? 'border-blue-600 bg-blue-600 text-white'
-                        : 'border-slate-200 bg-white text-slate-600 hover:border-blue-300'
-                    )}
-                  >
-                    Talla niño
-                  </button>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <Label>
+              Talla <span className="text-red-500">*</span>
+            </Label>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  const nextGroup = sizeGroup === 'adult' ? 'child' : 'adult';
+                  toggleSizeGroup(nextGroup);
+                  setShowSizeGuide(false);
+                }}
+                className={cn(
+                  'rounded-lg border-2 px-3 py-1.5 text-xs font-semibold transition-all',
+                  sizeGroup === 'child'
+                    ? 'border-blue-600 bg-blue-600 text-white'
+                    : 'border-slate-200 bg-white text-slate-600 hover:border-blue-300'
+                )}
+              >
+                Talla niño
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowSizeGuide((visible) => !visible)}
+                className="text-xs font-semibold text-blue-600 underline underline-offset-2 hover:text-blue-800"
+              >
+                ¿No sabes qué talla?
+              </button>
+            </div>
+          </div>
+          {showSizeGuide && (
+            <div className="mt-3 rounded-xl border border-blue-100 bg-blue-50 p-3">
+              <p className="mb-2 text-sm font-semibold text-slate-800">
+                Guía de tallas {sizeGroup === 'child' ? 'infantil' : 'adulta'}
+              </p>
+              {sizeGroup === 'child' ? (
+                <img
+                  src="/child-size-guide.png"
+                  alt="Tabla de medidas de tallas infantiles"
+                  className="max-h-80 w-full rounded-lg border bg-white object-contain"
+                />
+              ) : (
+                <p className="text-sm text-slate-600">
+                  La guía de tallas adulta se añadirá cuando nos envíes la imagen.
+                </p>
+              )}
+            </div>
+          )}
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {sizes
