@@ -713,11 +713,13 @@ export default function OrderPage() {
                   alt="Tabla de medidas de tallas infantiles"
                   className="max-h-80 w-full rounded-lg border bg-white object-contain"
                 />
-              ) : (
-                <p className="text-sm text-slate-600">
-                  La guía de tallas adulta se añadirá cuando nos envíes la imagen.
-                </p>
-              )}
+  ) : (
+  <img
+  src="/adult-size-guide.png"
+  alt="Tabla de medidas de tallas adultas, femeninas e infantiles"
+  className="max-h-80 w-full rounded-lg border bg-white object-contain"
+  />
+  )}
             </div>
           )}
                 </div>
