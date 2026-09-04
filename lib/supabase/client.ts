@@ -8,8 +8,9 @@ const supabaseAnonKey =
   process.env.SUPABASE_ANON_KEY ??
   process.env.SUPABASE_PUBLISHABLE_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Supabase environment variables are not configured.');
-}
+// Keep static generation from crashing when a local build does not load the
+// project environment file. Vercel/v0 replaces these with the real values.
+const runtimeUrl = supabaseUrl ?? 'https://placeholder.supabase.co';
+const runtimeKey = supabaseAnonKey ?? 'placeholder-anon-key';
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient(runtimeUrl, runtimeKey);
