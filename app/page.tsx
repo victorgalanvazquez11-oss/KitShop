@@ -29,10 +29,19 @@ import {
   Repeat,
   ShoppingCart,
   Lock,
+  ExternalLink,
+  BookOpen,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
@@ -68,6 +77,7 @@ export default function OrderPage() {
   const [quantity, setQuantity] = useState(1);
   const [sizeGroup, setSizeGroup] = useState<'adult' | 'child'>('adult');
   const [showSizeGuide, setShowSizeGuide] = useState(false);
+  const [catalogOpen, setCatalogOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -504,17 +514,60 @@ export default function OrderPage() {
               {settings?.store_name || 'KitShop'}
             </span>
           </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => router.push('/admin')}
-            className="text-slate-500 hover:text-slate-900"
-          >
-            <Lock className="mr-1.5 h-4 w-4" />
-            Admin
-          </Button>
+          <div className="flex items-center gap-1">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setCatalogOpen(true)}
+              className="text-slate-500 hover:text-blue-600"
+            >
+              <BookOpen className="mr-1.5 h-4 w-4" />
+              Catálogo
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => router.push('/admin')}
+              className="text-slate-500 hover:text-slate-900"
+            >
+              <Lock className="mr-1.5 h-4 w-4" />
+              Admin
+            </Button>
+          </div>
         </div>
       </header>
+
+      <Dialog open={catalogOpen} onOpenChange={setCatalogOpen}>
+        <DialogContent className="flex h-[90vh] max-w-6xl flex-col gap-3 p-4 sm:p-6">
+          <DialogHeader className="shrink-0 pr-8">
+            <DialogTitle className="flex items-center gap-2 text-left">
+              <BookOpen className="h-5 w-5 text-blue-600" />
+              Catálogo de camisetas
+            </DialogTitle>
+            <DialogDescription className="text-left">
+              Explora todos los modelos disponibles en nuestro catálogo.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="min-h-0 flex-1 overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
+            <iframe
+              src="https://x.yupoo.com/photos/1022669895/albums"
+              title="Catálogo de camisetas KitShop"
+              className="h-full w-full border-0"
+              loading="lazy"
+              referrerPolicy="strict-origin-when-cross-origin"
+            />
+          </div>
+          <a
+            href="https://x.yupoo.com/photos/1022669895/albums"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex shrink-0 items-center justify-center gap-2 text-sm font-medium text-blue-600 transition-colors hover:text-blue-800"
+          >
+            Abrir catálogo en una pestaña nueva
+            <ExternalLink className="h-4 w-4" />
+          </a>
+        </DialogContent>
+      </Dialog>
 
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 to-blue-800 px-4 py-16 text-white">
